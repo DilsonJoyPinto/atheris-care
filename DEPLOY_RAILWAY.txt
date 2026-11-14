@@ -1,0 +1,55 @@
+ATHERIS CARE — RAILWAY DEPLOYMENT GUIDE
+
+Recommended topology: two Railway services from this same GitHub repository.
+- Frontend service root directory: /atheris
+- Backend service root directory: /backend
+
+1. Upload the extracted project contents to a GitHub repository.
+   Keep the atheris/ and backend/ folders at the repository root.
+   The repository can be private; Railway can deploy a connected private repo.
+
+2. Create a Railway project and deploy the GitHub repository as the FRONTEND service.
+   Service Settings -> Build -> Root Directory: /atheris
+   Railpack detects PHP because index.php is in this folder.
+   Wait for deployment, then Settings -> Networking -> Generate Domain.
+   Copy the public HTTPS domain, e.g. https://your-site.up.railway.app
+
+3. Add a second service from the same GitHub repository for the BACKEND.
+   Service Settings -> Build -> Root Directory: /backend
+   Build command: pip install -r requirements.txt
+   Start command: python serve.py
+   Generate a public domain in Settings -> Networking.
+   Check https://YOUR-BACKEND-DOMAIN/api/health
+
+4. Configure backend variables in the backend service:
+   ATHERIS_SECRET_KEY = a long random secret (do not publish it)
+   ATHERIS_DATABASE = /app/instance/atheris.sqlite3
+   ATHERIS_CORS_ORIGINS = https://YOUR-FRONTEND-DOMAIN
+   ATHERIS_SEED_DEMO_DATA = true
+   ATHERIS_MAX_CONTENT_LENGTH = 1048576
+   PORT is supplied by Railway; do not set it manually.
+
+5. Add a persistent volume to the BACKEND service.
+   Mount path: /app/instance
+   This is required to preserve the SQLite database between restarts/redeploys.
+   The application creates the database under this directory automatically.
+
+6. Update atheris/js/atheris-api-config.js in GitHub (or locally and push):
+   window.ATHERIS_API_BASE = 'https://YOUR-BACKEND-DOMAIN/api';
+   Replace the example domain with the exact backend domain, including /api.
+   Redeploy the frontend after this change.
+
+7. Final checks:
+   - Open the frontend HTTPS domain in a private/incognito browser window.
+   - Confirm no login/registration is required.
+   - Open the backend /api/health URL; expect JSON with status ok.
+   - Submit a fictional demo assessment; confirm it appears in history/dashboard.
+   - Refresh the page and confirm the record remains.
+   - Check browser DevTools Console/Network for CORS or failed API requests.
+
+IMPORTANT:
+- Never enter real astronaut, patient or personal medical information.
+- The public demo has no authentication and shared records may be visible to visitors.
+- Railway free/trial credits and storage are limited. Check the current plan and usage before leaving it online for judging.
+- Do not use the ephemeral filesystem for SQLite. The volume mount above is essential.
+- The website must be publicly reachable without passwords, permissions or registration.

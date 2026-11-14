@@ -1,0 +1,20 @@
+ATHERIS CARE — FULL PUBLIC DEMO PROJECT
+
+1) Install Python 3.10+ and PHP 8+.
+2) Open the backend folder in Command Prompt and run run_windows.bat.
+   Keep that window open. It starts the Flask API on port 5000.
+3) Open the atheris folder in a second Command Prompt and run:
+      php -S 127.0.0.1:8000
+4) Open this URL:
+      http://127.0.0.1:8000/index.php
+5) API health check:
+      http://127.0.0.1:5000/api/health
+
+NO LOGIN / NO REGISTRATION is required.
+
+IMPORTANT: This is a shared public demonstration database. Use fictional sample data only.
+Never enter real astronaut, patient or personal medical information. The sample readings are
+simulated and the prototype is not a validated medical device, diagnostic or treatment system.
+
+For public hosting, read README.md and backend/README.md. Localhost is not a public NASA
+submission URL; the frontend and API must be deployed to public HTTPS addresses.

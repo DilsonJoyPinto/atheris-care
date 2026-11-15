@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-const API=(window.ATHERIS_API_BASE||'http://127.0.0.1:5000/api').replace(/\/$/,'');
+const API=(window.ATHERIS_API_BASE||'https://atheris-care-api.onrender.com/api').replace(/\/$/,'');
 const ACTIVE='atheris_active_astronaut_v1';
 const $=(s,r=document)=>r.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
